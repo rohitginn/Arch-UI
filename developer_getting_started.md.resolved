@@ -1,0 +1,641 @@
+# ZenUI - Developer Getting Started Guide
+## Complete Step-by-Step Implementation
+
+---
+
+## Prerequisites
+
+Before you begin, ensure you have:
+- **Node.js** 18.0+ installed
+- **pnpm** 8.0+ installed (`npm install -g pnpm`)
+- **Git** installed
+- **VS Code** (recommended) with extensions:
+  - ESLint
+  - Prettier
+  - Tailwind CSS IntelliSense
+
+---
+
+## Step 1: Create Project Structure
+
+### 1.1 Initialize Monorepo
+
+```bash
+# Create project directory
+mkdir zenui
+cd zenui
+
+# Initialize pnpm workspace
+pnpm init
+
+# Create workspace configuration
+```
+
+### 1.2 Create pnpm-workspace.yaml
+
+```yaml
+# pnpm-workspace.yaml
+packages:
+  - 'packages/*'
+  - 'apps/*'
+```
+
+### 1.3 Create Root package.json
+
+```json
+{
+  "name": "zenui",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "clean": "turbo clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0",
+    "typescript": "^5.3.0",
+    "prettier": "^3.2.0",
+    "eslint": "^8.56.0"
+  },
+  "packageManager": "pnpm@8.15.0"
+}
+```
+
+### 1.4 Create turbo.json
+
+```json
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["**/.env.*local"],
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {},
+    "test": {}
+  }
+}
+```
+
+---
+
+## Step 2: Create Core Package
+
+### 2.1 Setup Core Package
+
+```bash
+# Create directories
+mkdir -p packages/core/src/{utils,types,constants,hooks}
+cd packages/core
+pnpm init
+```
+
+### 2.2 Core package.json
+
+```json
+{
+  "name": "@zenui/core",
+  "version": "0.1.0",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch"
+  },
+  "dependencies": {
+    "clsx": "^2.1.0",
+    "tailwind-merge": "^2.2.0"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.3.0"
+  }
+}
+```
+
+### 2.3 Create cn Utility
+
+```typescript
+// packages/core/src/utils/cn.ts
+
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+/**
+ * Merge class names with Tailwind CSS conflict resolution
+ * @example cn('px-4 py-2', isActive && 'bg-blue-500', className)
+ */
+export function cn(...inputs: ClassValue[]): string {
+  return twMerge(clsx(inputs));
+}
+```
+
+### 2.4 Create Design Tokens
+
+```typescript
+// packages/core/src/constants/design-tokens.ts
+
+export const designTokens = {
+  // Glass effect values
+  glass: {
+    blur: {
+      sm: '8px',
+      md: '12px',
+      lg: '16px',
+      xl: '24px',
+    },
+    background: {
+      light: 'rgba(255, 255, 255, 0.7)',
+      dark: 'rgba(255, 255, 255, 0.05)',
+    },
+    border: {
+      light: 'rgba(255, 255, 255, 0.3)',
+      dark: 'rgba(255, 255, 255, 0.1)',
+    },
+    shadow: {
+      sm: '0 2px 8px rgba(0, 0, 0, 0.1)',
+      md: '0 4px 16px rgba(0, 0, 0, 0.12)',
+      lg: '0 8px 32px rgba(0, 0, 0, 0.15)',
+    },
+  },
+  
+  // Animation durations
+  duration: {
+    fast: '150ms',
+    normal: '200ms',
+    slow: '300ms',
+  },
+  
+  // Easing functions
+  easing: {
+    default: 'cubic-bezier(0.4, 0, 0.2, 1)',
+    in: 'cubic-bezier(0.4, 0, 1, 1)',
+    out: 'cubic-bezier(0, 0, 0.2, 1)',
+    bounce: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+  },
+};
+```
+
+### 2.5 Export Everything
+
+```typescript
+// packages/core/src/index.ts
+
+export { cn } from './utils/cn';
+export { designTokens } from './constants/design-tokens';
+export * from './types';
+```
+
+---
+
+## Step 3: Create React Package
+
+### 3.1 Setup React Package
+
+```bash
+mkdir -p packages/react/src/components/glassmorphic
+cd packages/react
+pnpm init
+```
+
+### 3.2 React package.json
+
+```json
+{
+  "name": "@zenui/react",
+  "version": "0.1.0",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./glassmorphic": {
+      "import": "./dist/glassmorphic/index.mjs",
+      "require": "./dist/glassmorphic/index.js"
+    }
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "dependencies": {
+    "@zenui/core": "workspace:*",
+    "class-variance-authority": "^0.7.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.3.0"
+  }
+}
+```
+
+### 3.3 Create First Component: Glass Card
+
+```typescript
+// packages/react/src/components/glassmorphic/glass-card/glass-card.tsx
+
+import * as React from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '@zenui/core';
+
+const glassCardVariants = cva(
+  // Base styles - applied to all variants
+  [
+    'relative',
+    'rounded-2xl',
+    'overflow-hidden',
+    'border',
+    'transition-all',
+    'duration-200',
+    'ease-out',
+  ].join(' '),
+  {
+    variants: {
+      // Visual variants
+      variant: {
+        default: [
+          'bg-white/5',
+          'border-white/10',
+          'backdrop-blur-lg',
+          'shadow-lg',
+          'hover:bg-white/8',
+        ].join(' '),
+        bordered: [
+          'bg-white/5',
+          'border-2',
+          'border-white/20',
+          'backdrop-blur-lg',
+          'hover:border-white/30',
+        ].join(' '),
+        gradient: [
+          'bg-gradient-to-br',
+          'from-white/10',
+          'to-white/5',
+          'border-white/10',
+          'backdrop-blur-lg',
+          'hover:from-white/15',
+        ].join(' '),
+        glow: [
+          'bg-white/5',
+          'border-white/10',
+          'backdrop-blur-lg',
+          'shadow-[0_0_30px_rgba(255,255,255,0.1)]',
+          'hover:shadow-[0_0_40px_rgba(255,255,255,0.15)]',
+        ].join(' '),
+      },
+      
+      // Blur intensity
+      blur: {
+        sm: 'backdrop-blur-sm',
+        md: 'backdrop-blur-md',
+        lg: 'backdrop-blur-lg',
+        xl: 'backdrop-blur-xl',
+      },
+      
+      // Padding sizes
+      size: {
+        sm: 'p-4',
+        md: 'p-6',
+        lg: 'p-8',
+        xl: 'p-10',
+      },
+    },
+    
+    // Default values
+    defaultVariants: {
+      variant: 'default',
+      blur: 'lg',
+      size: 'md',
+    },
+  }
+);
+
+// TypeScript interface for component props
+export interface GlassCardProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof glassCardVariants> {
+  /** Enable scale animation on hover */
+  animated?: boolean;
+  /** Show shine effect on hover */
+  shine?: boolean;
+  /** Additional wrapper for the content */
+  asChild?: boolean;
+}
+
+/**
+ * GlassCard - A premium glassmorphic card component
+ * 
+ * @example
+ * <GlassCard variant="glow" size="lg">
+ *   <h2>Beautiful Card</h2>
+ *   <p>With frosted glass effect</p>
+ * </GlassCard>
+ */
+const GlassCard = React.forwardRef<HTMLDivElement, GlassCardProps>(
+  (
+    {
+      className,
+      variant,
+      blur,
+      size,
+      animated = false,
+      shine = false,
+      children,
+      ...props
+    },
+    ref
+  ) => {
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          glassCardVariants({ variant, blur, size }),
+          animated && 'hover:scale-[1.02] hover:-translate-y-1',
+          shine && 'group',
+          className
+        )}
+        {...props}
+      >
+        {/* Shine overlay - only rendered if shine prop is true */}
+        {shine && (
+          <div
+            className={cn(
+              'absolute inset-0 z-0',
+              'opacity-0 group-hover:opacity-100',
+              'bg-gradient-to-r from-transparent via-white/10 to-transparent',
+              'translate-x-[-100%] group-hover:translate-x-[100%]',
+              'transition-all duration-700 ease-out'
+            )}
+            aria-hidden="true"
+          />
+        )}
+        
+        {/* Content wrapper */}
+        <div className="relative z-10">
+          {children}
+        </div>
+      </div>
+    );
+  }
+);
+
+// Display name for React DevTools
+GlassCard.displayName = 'GlassCard';
+
+// Export component and variants
+export { GlassCard, glassCardVariants };
+```
+
+### 3.4 Create Component Index
+
+```typescript
+// packages/react/src/components/glassmorphic/index.ts
+
+export { GlassCard, glassCardVariants } from './glass-card/glass-card';
+export type { GlassCardProps } from './glass-card/glass-card';
+
+// Add more exports as you create components:
+// export { GlassButton } from './glass-button/glass-button';
+// export { GlassModal } from './glass-modal/glass-modal';
+```
+
+### 3.5 Main Package Export
+
+```typescript
+// packages/react/src/index.ts
+
+// Glassmorphic components
+export * from './components/glassmorphic';
+
+// Re-export core utilities for convenience
+export { cn } from '@zenui/core';
+```
+
+---
+
+## Step 4: Create Documentation Site
+
+### 4.1 Setup Docs App
+
+```bash
+# Using Astro for docs (fast, great DX)
+cd apps
+pnpm create astro@latest docs -- --template minimal --typescript strict
+cd docs
+pnpm add @astrojs/react @astrojs/tailwind tailwindcss
+pnpm add -D @types/react @types/react-dom
+```
+
+### 4.2 Configure Astro
+
+```javascript
+// apps/docs/astro.config.mjs
+
+import { defineConfig } from 'astro/config';
+import react from '@astrojs/react';
+import tailwind from '@astrojs/tailwind';
+
+export default defineConfig({
+  integrations: [
+    react(),
+    tailwind(),
+  ],
+  output: 'static',
+});
+```
+
+### 4.3 Tailwind Config for Docs
+
+```javascript
+// apps/docs/tailwind.config.js
+
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  darkMode: 'class',
+  content: ['./src/**/*.{astro,html,js,jsx,md,mdx,ts,tsx}'],
+  theme: {
+    extend: {
+      // Glass effect utilities
+      backdropBlur: {
+        glass: '16px',
+      },
+      // Custom colors
+      colors: {
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+      },
+      // Custom animations
+      animation: {
+        'shine': 'shine 1.5s ease-in-out infinite',
+        'float': 'float 3s ease-in-out infinite',
+      },
+      keyframes: {
+        shine: {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' },
+        },
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+      },
+    },
+  },
+  plugins: [
+    require('tailwindcss-animate'),
+  ],
+};
+```
+
+---
+
+## Step 5: Install Dependencies
+
+```bash
+# Return to root
+cd ../..
+
+# Install all dependencies
+pnpm install
+
+# Build core package first
+pnpm --filter @zenui/core build
+
+# Build React package
+pnpm --filter @zenui/react build
+
+# Start docs development
+pnpm --filter docs dev
+```
+
+---
+
+## Step 6: Create Your First Page
+
+### 6.1 Docs Layout
+
+```astro
+---
+// apps/docs/src/layouts/Layout.astro
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width" />
+  <title>{title} | ZenUI</title>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+  <slot />
+</body>
+</html>
+```
+
+### 6.2 Component Demo Page
+
+```astro
+---
+// apps/docs/src/pages/components/glassmorphic/glass-card.astro
+import Layout from '../../../layouts/Layout.astro';
+import { GlassCardDemo } from '../../../components/demos/GlassCardDemo';
+---
+
+<Layout title="Glass Card">
+  <main class="container mx-auto px-4 py-12">
+    <h1 class="text-4xl font-bold text-white mb-4">Glass Card</h1>
+    <p class="text-white/60 mb-8">
+      A beautiful frosted glass card with backdrop blur effect.
+    </p>
+    
+    <!-- Live Preview -->
+    <div class="rounded-xl border border-white/10 overflow-hidden">
+      <GlassCardDemo client:load />
+    </div>
+  </main>
+</Layout>
+```
+
+---
+
+## Step 7: Test Your Component
+
+```bash
+# Run docs dev server
+pnpm --filter docs dev
+
+# Open http://localhost:4321/components/glassmorphic/glass-card
+```
+
+---
+
+## Common Commands Reference
+
+| Command | Description |
+|---------|-------------|
+| `pnpm install` | Install all dependencies |
+| `pnpm dev` | Start all dev servers |
+| `pnpm build` | Build all packages |
+| `pnpm --filter @zenui/core build` | Build only core |
+| `pnpm --filter @zenui/react build` | Build only React |
+| `pnpm --filter docs dev` | Start docs dev server |
+| `pnpm add <pkg> --filter <workspace>` | Add dep to specific package |
+
+---
+
+## Troubleshooting
+
+### Issue: Module not found
+```bash
+# Rebuild all packages
+pnpm build
+```
+
+### Issue: TypeScript errors
+```bash
+# Check TypeScript
+pnpm tsc --noEmit
+```
+
+### Issue: Tailwind not working
+- Ensure `tailwind.config.js` content paths are correct
+- Restart dev server after config changes
+
+---
+
+## Next Steps
+
+1. ✅ Create remaining glassmorphic components
+2. ✅ Build component preview system
+3. ✅ Add CLI tool
+4. ✅ Write documentation
+5. ✅ Publish to npm

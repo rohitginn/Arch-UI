@@ -1,0 +1,60 @@
+{
+    "name": "@archui/vue",
+    "version": "0.1.0",
+    "description": "Vue 3 components for ZenUI glassmorphic design system",
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        },
+        "./glassmorphic": {
+            "import": "./dist/glassmorphic/index.mjs",
+            "require": "./dist/glassmorphic/index.js"
+        }
+    },
+    "files": [
+        "dist"
+    ],
+    "sideEffects": false,
+    "scripts": {
+        "build": "vite build",
+        "dev": "vite build --watch",
+        "typecheck": "vue-tsc --noEmit",
+        "lint": "eslint src/"
+    },
+    "peerDependencies": {
+        "vue": "^3.4.0"
+    },
+    "dependencies": {
+        "@archui/core": "workspace:*",
+        "@vueuse/motion": "^3.0.3",
+        "cobe": "^0.6.5",
+        "lucide-vue-next": "^0.575.0"
+    },
+    "devDependencies": {
+        "@vitejs/plugin-vue": "^5.0.0",
+        "typescript": "^5.3.3",
+        "vite": "^5.0.0",
+        "vite-plugin-dts": "^3.7.0",
+        "vue": "^3.4.0",
+        "vue-tsc": "^3.2.4"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/zenui/zenui.git",
+        "directory": "packages/vue"
+    },
+    "license": "MIT",
+    "keywords": [
+        "vue",
+        "vue3",
+        "components",
+        "glassmorphism",
+        "ui",
+        "tailwind"
+    ]
+}

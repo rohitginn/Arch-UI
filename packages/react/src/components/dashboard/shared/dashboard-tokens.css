@@ -1,0 +1,84 @@
+/**
+ * Dashboard CSS Custom Properties
+ * 
+ * Single source of truth for dashboard theming.
+ * Applied to `[data-theme]` on the root element.
+ * Light and dark tokens for surfaces, text, borders, accents.
+ */
+
+:root,
+[data-theme='light'] {
+    /* ── Surfaces ─────────────────────────────── */
+    --dash-bg: #f8f9fb;
+    --dash-surface: #ffffff;
+    --dash-surface-hover: #f1f3f5;
+    --dash-surface-elevated: #ffffff;
+
+    /* ── Text ──────────────────────────────────── */
+    --dash-text: #111827;
+    --dash-text-secondary: #4b5563;
+    --dash-text-muted: #9ca3af;
+
+    /* ── Borders ───────────────────────────────── */
+    --dash-border: #e5e7eb;
+    --dash-border-subtle: #f3f4f6;
+
+    /* ── Accent ────────────────────────────────── */
+    --dash-accent: #3b82f6;
+    --dash-accent-soft: rgba(59, 130, 246, 0.08);
+
+    /* ── Status ────────────────────────────────── */
+    --dash-success: #10b981;
+    --dash-success-soft: rgba(16, 185, 129, 0.08);
+    --dash-error: #ef4444;
+    --dash-error-soft: rgba(239, 68, 68, 0.08);
+
+    /* ── Chart ─────────────────────────────────── */
+    --dash-chart-stroke: #3b82f6;
+    --dash-chart-fill: rgba(59, 130, 246, 0.06);
+    --dash-chart-grid: #f3f4f6;
+
+    /* ── Shadows ───────────────────────────────── */
+    --dash-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+    --dash-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.04),
+        0 1px 2px rgba(0, 0, 0, 0.02);
+    --dash-shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.06),
+        0 1px 3px rgba(0, 0, 0, 0.02);
+
+    /* ── Transitions ───────────────────────────── */
+    --dash-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --dash-transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    --dash-transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme='dark'] {
+    --dash-bg: #0a0a0f;
+    --dash-surface: rgba(255, 255, 255, 0.04);
+    --dash-surface-hover: rgba(255, 255, 255, 0.06);
+    --dash-surface-elevated: rgba(255, 255, 255, 0.06);
+
+    --dash-text: #f9fafb;
+    --dash-text-secondary: #9ca3af;
+    --dash-text-muted: #6b7280;
+
+    --dash-border: rgba(255, 255, 255, 0.08);
+    --dash-border-subtle: rgba(255, 255, 255, 0.04);
+
+    --dash-accent: #60a5fa;
+    --dash-accent-soft: rgba(96, 165, 250, 0.12);
+
+    --dash-success: #34d399;
+    --dash-success-soft: rgba(52, 211, 153, 0.12);
+    --dash-error: #f87171;
+    --dash-error-soft: rgba(248, 113, 113, 0.12);
+
+    --dash-chart-stroke: #60a5fa;
+    --dash-chart-fill: rgba(96, 165, 250, 0.08);
+    --dash-chart-grid: rgba(255, 255, 255, 0.04);
+
+    --dash-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+    --dash-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.3),
+        0 1px 2px rgba(0, 0, 0, 0.15);
+    --dash-shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.4),
+        0 1px 3px rgba(0, 0, 0, 0.2);
+}

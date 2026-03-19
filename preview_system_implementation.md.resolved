@@ -1,0 +1,573 @@
+# ZenUI - Component Preview System
+## Technical Implementation Guide
+
+---
+
+## 1. Preview System Overview
+
+The component preview system allows users to:
+- See live rendered components
+- Switch between React/Vue/Next/Nuxt code
+- Toggle light/dark themes
+- Change viewport sizes (mobile/tablet/desktop)
+- Copy code with one click
+- Edit code and see live updates
+
+---
+
+## 2. Preview Container Component
+
+```tsx
+// apps/docs/src/components/preview/PreviewContainer.tsx
+
+import { useState } from 'react';
+import { PreviewToolbar } from './PreviewToolbar';
+import { PreviewFrame } from './PreviewFrame';
+import { CodeBlock } from './CodeBlock';
+
+interface PreviewContainerProps {
+  componentName: string;
+  examples: {
+    react: string;
+    vue: string;
+  };
+  defaultProps?: Record<string, any>;
+}
+
+export function PreviewContainer({
+  componentName,
+  examples,
+  defaultProps = {},
+}: PreviewContainerProps) {
+  // Preview State
+  const [framework, setFramework] = useState<'react' | 'vue'>('react');
+  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
+  const [viewport, setViewport] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
+  const [isCodeVisible, setIsCodeVisible] = useState(true);
+  const [editedCode, setEditedCode] = useState(examples[framework]);
+  
+  // Viewport sizes
+  const viewportSizes = {
+    mobile: { width: 375, height: 667 },
+    tablet: { width: 768, height: 1024 },
+    desktop: { width: '100%', height: 400 },
+  };
+  
+  // Handle framework change
+  const handleFrameworkChange = (newFramework: 'react' | 'vue') => {
+    setFramework(newFramework);
+    setEditedCode(examples[newFramework]);
+  };
+  
+  return (
+    <div className="preview-container rounded-xl border border-white/10 overflow-hidden">
+      {/* Toolbar */}
+      <PreviewToolbar
+        framework={framework}
+        onFrameworkChange={handleFrameworkChange}
+        theme={theme}
+        onThemeChange={setTheme}
+        viewport={viewport}
+        onViewportChange={setViewport}
+        isCodeVisible={isCodeVisible}
+        onToggleCode={() => setIsCodeVisible(!isCodeVisible)}
+      />
+      
+      {/* Live Preview */}
+      <div 
+        className="preview-wrapper bg-gradient-to-br from-slate-900 to-slate-800 p-8"
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '300px',
+        }}
+      >
+        <PreviewFrame
+          code={editedCode}
+          framework={framework}
+          theme={theme}
+          viewport={viewportSizes[viewport]}
+        />
+      </div>
+      
+      {/* Code Block */}
+      {isCodeVisible && (
+        <CodeBlock
+          code={editedCode}
+          language={framework === 'react' ? 'tsx' : 'vue'}
+          onCodeChange={setEditedCode}
+          showLineNumbers={true}
+        />
+      )}
+    </div>
+  );
+}
+```
+
+---
+
+## 3. Preview Toolbar Component
+
+```tsx
+// apps/docs/src/components/preview/PreviewToolbar.tsx
+
+import { Monitor, Tablet, Smartphone, Sun, Moon, Code, Copy } from 'lucide-react';
+
+interface PreviewToolbarProps {
+  framework: 'react' | 'vue';
+  onFrameworkChange: (framework: 'react' | 'vue') => void;
+  theme: 'light' | 'dark';
+  onThemeChange: (theme: 'light' | 'dark') => void;
+  viewport: 'mobile' | 'tablet' | 'desktop';
+  onViewportChange: (viewport: 'mobile' | 'tablet' | 'desktop') => void;
+  isCodeVisible: boolean;
+  onToggleCode: () => void;
+}
+
+export function PreviewToolbar({
+  framework,
+  onFrameworkChange,
+  theme,
+  onThemeChange,
+  viewport,
+  onViewportChange,
+  isCodeVisible,
+  onToggleCode,
+}: PreviewToolbarProps) {
+  return (
+    <div className="preview-toolbar flex items-center justify-between px-4 py-2 bg-slate-900/50 border-b border-white/10">
+      {/* Left: Framework Selector */}
+      <div className="flex items-center gap-1">
+        <FrameworkButton
+          active={framework === 'react'}
+          onClick={() => onFrameworkChange('react')}
+        >
+          React
+        </FrameworkButton>
+        <FrameworkButton
+          active={framework === 'vue'}
+          onClick={() => onFrameworkChange('vue')}
+        >
+          Vue
+        </FrameworkButton>
+      </div>
+      
+      {/* Center: Viewport Selector */}
+      <div className="flex items-center gap-1 bg-slate-800 rounded-lg p-1">
+        <ViewportButton
+          active={viewport === 'mobile'}
+          onClick={() => onViewportChange('mobile')}
+          icon={<Smartphone size={16} />}
+          label="Mobile"
+        />
+        <ViewportButton
+          active={viewport === 'tablet'}
+          onClick={() => onViewportChange('tablet')}
+          icon={<Tablet size={16} />}
+          label="Tablet"
+        />
+        <ViewportButton
+          active={viewport === 'desktop'}
+          onClick={() => onViewportChange('desktop')}
+          icon={<Monitor size={16} />}
+          label="Desktop"
+        />
+      </div>
+      
+      {/* Right: Theme & Code Toggle */}
+      <div className="flex items-center gap-2">
+        <button
+          onClick={() => onThemeChange(theme === 'light' ? 'dark' : 'light')}
+          className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+          aria-label="Toggle theme"
+        >
+          {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
+        </button>
+        
+        <button
+          onClick={onToggleCode}
+          className={`p-2 rounded-lg transition-colors ${
+            isCodeVisible ? 'bg-white/10' : 'hover:bg-white/10'
+          }`}
+          aria-label="Toggle code"
+        >
+          <Code size={16} />
+        </button>
+      </div>
+    </div>
+  );
+}
+```
+
+---
+
+## 4. Preview Frame (Iframe Sandbox)
+
+```tsx
+// apps/docs/src/components/preview/PreviewFrame.tsx
+
+import { useRef, useEffect, useState } from 'react';
+
+interface PreviewFrameProps {
+  code: string;
+  framework: 'react' | 'vue';
+  theme: 'light' | 'dark';
+  viewport: { width: number | string; height: number };
+}
+
+export function PreviewFrame({
+  code,
+  framework,
+  theme,
+  viewport,
+}: PreviewFrameProps) {
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [error, setError] = useState<string | null>(null);
+  
+  // Generate the preview HTML
+  const generatePreviewHtml = () => {
+    const dependencies = getDependencies(framework);
+    
+    return `
+<!DOCTYPE html>
+<html class="${theme}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          backdropBlur: {
+            glass: '16px',
+          },
+        },
+      },
+    };
+  </script>
+  
+  <!-- ZenUI Styles -->
+  <style>
+    ${getZenUIStyles()}
+  </style>
+  
+  <!-- Framework Dependencies -->
+  ${dependencies.scripts}
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 ${
+      theme === 'dark' 
+        ? 'bg-gradient-to-br from-slate-900 to-slate-800' 
+        : 'bg-gradient-to-br from-slate-100 to-white'
+    }">
+  <div id="root"></div>
+  
+  <script type="text/babel">
+    ${generateRenderCode(code, framework)}
+  </script>
+  
+  ${dependencies.runtime}
+</body>
+</html>
+    `;
+  };
+  
+  // Update iframe when code/theme/framework changes
+  useEffect(() => {
+    if (iframeRef.current) {
+      try {
+        const html = generatePreviewHtml();
+        iframeRef.current.srcdoc = html;
+        setError(null);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : 'Preview error');
+      }
+    }
+  }, [code, framework, theme]);
+  
+  return (
+    <div 
+      className="preview-frame-container relative"
+      style={{
+        width: viewport.width,
+        height: viewport.height,
+        maxWidth: '100%',
+      }}
+    >
+      {error ? (
+        <div className="error-overlay absolute inset-0 flex items-center justify-center bg-red-500/10 rounded-lg">
+          <p className="text-red-400 text-sm">{error}</p>
+        </div>
+      ) : (
+        <iframe
+          ref={iframeRef}
+          sandbox="allow-scripts allow-same-origin"
+          className="w-full h-full rounded-lg border border-white/10"
+          title="Component Preview"
+        />
+      )}
+    </div>
+  );
+}
+
+// Helper: Get framework-specific dependencies
+function getDependencies(framework: 'react' | 'vue') {
+  if (framework === 'react') {
+    return {
+      scripts: `
+        <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+        <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+      `,
+      runtime: `
+        <script>
+          const root = ReactDOM.createRoot(document.getElementById('root'));
+          root.render(React.createElement(Demo));
+        </script>
+      `,
+    };
+  }
+  
+  // Vue
+  return {
+    scripts: `
+      <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    `,
+    runtime: `
+      <script>
+        Vue.createApp(Demo).mount('#root');
+      </script>
+    `,
+  };
+}
+
+// Helper: Generate render code
+function generateRenderCode(code: string, framework: 'react' | 'vue') {
+  // Extract and wrap component code for preview
+  return code;
+}
+
+// Helper: Get ZenUI base styles
+function getZenUIStyles() {
+  return `
+    :root {
+      --background: 0 0% 100%;
+      --foreground: 222.2 84% 4.9%;
+      --glass-blur: 16px;
+      --glass-bg-light: rgba(255, 255, 255, 0.7);
+      --glass-bg-dark: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.1);
+    }
+    
+    .dark {
+      --background: 222.2 84% 4.9%;
+      --foreground: 210 40% 98%;
+    }
+    
+    .glass {
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      background: var(--glass-bg-dark);
+      border: 1px solid var(--glass-border);
+    }
+  `;
+}
+```
+
+---
+
+## 5. Code Block with Copy & Edit
+
+```tsx
+// apps/docs/src/components/preview/CodeBlock.tsx
+
+import { useState } from 'react';
+import { Check, Copy, Edit2 } from 'lucide-react';
+import { Highlight, themes } from 'prism-react-renderer';
+
+interface CodeBlockProps {
+  code: string;
+  language: 'tsx' | 'vue' | 'css' | 'bash';
+  onCodeChange?: (code: string) => void;
+  showLineNumbers?: boolean;
+  editable?: boolean;
+}
+
+export function CodeBlock({
+  code,
+  language,
+  onCodeChange,
+  showLineNumbers = true,
+  editable = false,
+}: CodeBlockProps) {
+  const [copied, setCopied] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editableCode, setEditableCode] = useState(code);
+  
+  // Copy to clipboard
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+  
+  // Handle code edit
+  const handleCodeChange = (newCode: string) => {
+    setEditableCode(newCode);
+    onCodeChange?.(newCode);
+  };
+  
+  return (
+    <div className="code-block relative group">
+      {/* Actions Bar */}
+      <div className="absolute top-3 right-3 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+        {editable && (
+          <button
+            onClick={() => setIsEditing(!isEditing)}
+            className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+            aria-label="Edit code"
+          >
+            <Edit2 size={14} />
+          </button>
+        )}
+        
+        <button
+          onClick={handleCopy}
+          className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+          aria-label="Copy code"
+        >
+          {copied ? <Check size={14} className="text-green-400" /> : <Copy size={14} />}
+        </button>
+      </div>
+      
+      {/* Code Display */}
+      {isEditing ? (
+        <textarea
+          value={editableCode}
+          onChange={(e) => handleCodeChange(e.target.value)}
+          className="w-full h-64 p-4 bg-slate-950 text-slate-200 font-mono text-sm rounded-b-xl resize-none focus:outline-none"
+          spellCheck={false}
+        />
+      ) : (
+        <Highlight
+          theme={themes.nightOwl}
+          code={code.trim()}
+          language={language}
+        >
+          {({ className, style, tokens, getLineProps, getTokenProps }) => (
+            <pre
+              className={`${className} p-4 overflow-x-auto rounded-b-xl`}
+              style={{ ...style, margin: 0 }}
+            >
+              {tokens.map((line, i) => (
+                <div key={i} {...getLineProps({ line })}>
+                  {showLineNumbers && (
+                    <span className="inline-block w-8 text-slate-600 select-none">
+                      {i + 1}
+                    </span>
+                  )}
+                  {line.map((token, key) => (
+                    <span key={key} {...getTokenProps({ token })} />
+                  ))}
+                </div>
+              ))}
+            </pre>
+          )}
+        </Highlight>
+      )}
+    </div>
+  );
+}
+```
+
+---
+
+## 6. Example Usage in Documentation
+
+```mdx
+// apps/docs/src/pages/components/glassmorphic/glass-card.mdx
+
+---
+title: Glass Card
+description: A beautiful frosted glass card with backdrop blur effect
+category: glassmorphic
+priority: critical
+---
+
+import { PreviewContainer } from '@/components/preview/PreviewContainer';
+import { PropsTable } from '@/components/docs/PropsTable';
+
+# Glass Card
+
+A premium glassmorphic card component with frosted glass effect, 
+perfect for creating modern, elegant interfaces.
+
+<PreviewContainer
+  componentName="glass-card"
+  examples={{
+    react: `
+function Demo() {
+  return (
+    <GlassCard className="p-6 max-w-md">
+      <h3 className="text-xl font-semibold text-white mb-2">
+        Glass Card
+      </h3>
+      <p className="text-white/70">
+        This card features a beautiful frosted glass effect
+        with smooth animations and premium aesthetics.
+      </p>
+    </GlassCard>
+  );
+}
+    `,
+    vue: `
+<template>
+  <GlassCard class="p-6 max-w-md">
+    <h3 class="text-xl font-semibold text-white mb-2">
+      Glass Card
+    </h3>
+    <p class="text-white/70">
+      This card features a beautiful frosted glass effect
+      with smooth animations and premium aesthetics.
+    </p>
+  </GlassCard>
+</template>
+    `,
+  }}
+/>
+
+## Installation
+
+```bash
+npx zenui add glass-card
+```
+
+## Props
+
+<PropsTable
+  props={[
+    {
+      name: 'blur',
+      type: "'sm' | 'md' | 'lg' | 'xl'",
+      default: "'md'",
+      description: 'Blur intensity of the glass effect',
+    },
+    {
+      name: 'variant',
+      type: "'default' | 'bordered' | 'gradient'",
+      default: "'default'",
+      description: 'Visual variant of the card',
+    },
+    {
+      name: 'className',
+      type: 'string',
+      default: "''",
+      description: 'Additional CSS classes',
+    },
+  ]}
+/>
+```

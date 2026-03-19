@@ -1,0 +1,723 @@
+@import "tailwindcss";
+@source "../../../packages/react/src";
+@source "../../../packages/core/src";
+@source "../../../packages/vue/src";
+
+/* ============================================================
+   Button Text Color Theme Extension
+   ============================================================
+   CRITICAL FIX: Tailwind 4's JIT was NOT generating CSS for 
+   arbitrary value classes like [color:rgb(var(--btn-fg-*))].
+   
+   This @theme block defines proper color tokens that Tailwind
+   will compile into text-btn-* utility classes.
+   
+   The actual RGB values are defined in :root and .dark below,
+   using space-separated format (e.g., "15 23 42") for rgb().
+   ============================================================ */
+@theme inline {
+  /* Button text colors - these will generate text-btn-* classes */
+  --color-btn-default: rgb(var(--btn-fg-default));
+  --color-btn-on-color: rgb(var(--btn-fg-on-color));
+  --color-btn-muted: rgb(var(--btn-fg-muted));
+  --color-btn-warning: rgb(var(--btn-fg-warning));
+
+  /* ================================================================
+     FORM CONTROL SEMANTIC COLORS
+     Purpose: Generate text-form-*, bg-form-*, border-form-* classes
+     ================================================================ */
+
+  /* Backgrounds */
+  --color-form-bg: var(--form-bg);
+  --color-form-bg-hover: var(--form-bg-hover);
+  --color-form-bg-focus: var(--form-bg-focus);
+  --color-form-bg-disabled: var(--form-bg-disabled);
+
+  /* Foreground Text */
+  --color-form-text: var(--form-text);
+  --color-form-placeholder: var(--form-placeholder);
+  --color-form-disabled: var(--form-disabled);
+  --color-form-label: var(--form-label);
+  --color-form-helper: var(--form-helper);
+
+  /* Borders */
+  --color-form-border: var(--form-border);
+  --color-form-border-hover: var(--form-border-hover);
+  --color-form-border-focus: var(--form-border-focus);
+  --color-form-border-disabled: var(--form-border-disabled);
+
+  /* Focus Ring */
+  --color-ring-focus: var(--ring-focus);
+
+  /* Error State */
+  --color-form-error-border: var(--form-error-border);
+  --color-form-error-ring: var(--form-error-ring);
+  --color-form-error-bg: var(--form-error-bg);
+  --color-form-error-text: var(--form-error-text);
+
+  /* Success State */
+  --color-form-success-border: var(--form-success-border);
+  --color-form-success-ring: var(--form-success-ring);
+  --color-form-success-bg: var(--form-success-bg);
+  --color-form-success-text: var(--form-success-text);
+
+  /* ================================================================
+     GENERAL UI COMPONENT COLORS
+     Purpose: Generate surface-*, interactive-*, text-* classes
+     ================================================================ */
+
+  /* Surface backgrounds (panels, cards, containers) */
+  --color-surface-bg: var(--surface-bg);
+  --color-surface-bg-subtle: var(--surface-bg-subtle);
+  --color-surface-bg-muted: var(--surface-bg-muted);
+
+  /* Surface borders */
+  --color-surface-border: var(--surface-border);
+  --color-surface-border-subtle: var(--surface-border-subtle);
+  --color-surface-border-strong: var(--surface-border-strong);
+
+  /* Interactive elements (tabs, pagination, nav items) */
+  --color-interactive-bg: var(--interactive-bg);
+  --color-interactive-bg-hover: var(--interactive-bg-hover);
+  --color-interactive-bg-active: var(--interactive-bg-active);
+
+  /* Text hierarchy */
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-text-faint: var(--text-faint);
+
+  /* Standard Colors (Shadcn/Tailwind) */
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+}
+
+
+/* Custom properties for theming - shadcn style */
+:root {
+  --background: 0 0% 100%;
+  --foreground: 240 10% 3.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 3.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 3.9%;
+  --primary: 240 5.9% 10%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 240 4.8% 95.9%;
+  --secondary-foreground: 240 5.9% 10%;
+  --muted: 240 4.8% 95.9%;
+  --muted-foreground: 240 3.8% 46.1%;
+  --accent: 240 4.8% 95.9%;
+  --accent-foreground: 240 5.9% 10%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 5.9% 90%;
+  --input: 240 5.9% 90%;
+  --ring: 240 5.9% 10%;
+  --radius: 0.5rem;
+
+  /* Button-specific foreground tokens - WCAG AA compliant */
+  --btn-fg-default: 15 23 42;
+  /* slate-900 - for default/ghost/outline variants */
+  --btn-fg-on-color: 255 255 255;
+  /* white - for colored backgrounds (primary, secondary, etc.) */
+  --btn-fg-muted: 71 85 105;
+  /* slate-600 - for muted/subtle states */
+  --btn-fg-warning: 69 26 3;
+  /* amber-950 - high contrast on amber background */
+
+  /* ================================================================
+     SEMANTIC FORM CONTROL TOKENS - Light Theme
+     Purpose: Role-based color contract for all form inputs
+     Design: SOLID colors (not translucent) with WCAG AA contrast
+     ================================================================ */
+
+  /* Backgrounds - Pure solid (no transparency on white page) */
+  --form-bg: 255 255 255;
+  /* Pure white - clear surface */
+  --form-bg-hover: 249 250 251;
+  /* gray-50 - subtle darkening */
+  --form-bg-focus: 255 255 255;
+  /* Pure white - reset on focus */
+  --form-bg-disabled: 243 244 246;
+  /* gray-100 - visible muting */
+
+  /* Foreground Text */
+  --form-text: 15 23 42;
+  /* slate-900 - high contrast */
+  --form-text-placeholder: 100 116 139;
+  /* slate-500 - 4.6:1 contrast */
+  --form-text-disabled: 148 163 184;
+  /* slate-400 - muted but readable */
+  --form-label: 71 85 105;
+  /* slate-600 - distinct from text */
+  --form-helper: 100 116 139;
+  /* slate-500 */
+
+  /* Borders - SOLID colors (3:1 contrast minimum for WCAG) */
+  --form-border: 226 232 240;
+  /* slate-200 - 1.4:1 subtle */
+  --form-border-hover: 203 213 225;
+  /* slate-300 - 1.9:1 */
+  --form-border-focus: 100 116 139;
+  /* slate-500 - 3.2:1 WCAG AA pass */
+  --form-border-disabled: 241 245 249;
+  /* slate-100 */
+
+  /* Focus Ring - Distinct Accent (blue for accessibility) */
+  --ring-focus: 59 130 246;
+  /* blue-500 - 3.6:1 contrast */
+  --ring-focus-shadow: 59 130 246;
+  /* blue-500 at 20% opacity for glow */
+  --ring-focus-offset: 255 255 255;
+  /* white */
+
+  /* Error State */
+  --form-error-border: 239 68 68;
+  /* red-500 */
+  --form-error-ring: 239 68 68;
+  /* red-500 */
+  --form-error-bg: 254 242 242;
+  /* red-50 */
+  --form-error-text: 220 38 38;
+  /* red-600 */
+
+  /* Success State */
+  --form-success-border: 34 197 94;
+  /* green-500 */
+  --form-success-ring: 34 197 94;
+  /* green-500 */
+  --form-success-bg: 240 253 244;
+  /* green-50 */
+  --form-success-text: 22 163 74;
+  /* green-600 */
+
+  /* ================================================================
+     GENERAL UI COMPONENT TOKENS - Light Theme
+     Purpose: Semantic colors for panels, cards, nav, tabs, etc.
+     Design: SOLID colors with good visibility on white page
+     ================================================================ */
+
+  /* Surface backgrounds (panels, cards, containers) */
+  --surface-bg: 255 255 255;
+  /* white - solid surface */
+  --surface-bg-subtle: 249 250 251;
+  /* gray-50 */
+  --surface-bg-muted: 243 244 246;
+  /* gray-100 */
+
+  /* Surface borders */
+  --surface-border: 226 232 240;
+  /* slate-200 - visible */
+  --surface-border-subtle: 241 245 249;
+  /* slate-100 */
+  --surface-border-strong: 203 213 225;
+  /* slate-300 */
+
+  /* Interactive elements (tabs, pagination, nav items) */
+  --interactive-bg: 241 245 249;
+  /* slate-100 */
+  --interactive-bg-hover: 226 232 240;
+  /* slate-200 */
+  --interactive-bg-active: 203 213 225;
+  /* slate-300 */
+
+  /* Text hierarchy */
+  --text-primary: 15 23 42;
+  /* slate-900 */
+  --text-secondary: 71 85 105;
+  /* slate-600 */
+  --text-muted: 100 116 139;
+  /* slate-500 */
+  --text-faint: 148 163 184;
+  /* slate-400 */
+
+  /* Font families */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+.dark {
+  --background: 9 6% 6%;
+  --foreground: 0 0% 95%;
+  --card: 9 6% 8%;
+  --card-foreground: 0 0% 95%;
+  --popover: 9 6% 8%;
+  --popover-foreground: 0 0% 95%;
+  --primary: 0 0% 98%;
+  --primary-foreground: 240 5.9% 10%;
+  --secondary: 240 3.7% 15.9%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 0 0% 12%;
+  --muted-foreground: 240 5% 64.9%;
+  --accent: 240 3.7% 15.9%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 0 0% 14.9%;
+  --input: 240 3.7% 15.9%;
+  --ring: 240 4.9% 83.9%;
+
+  /* Button-specific foreground tokens for dark theme */
+  --btn-fg-default: 255 255 255;
+  /* white - for default/ghost/outline variants */
+  --btn-fg-on-color: 255 255 255;
+  /* white - remains white on colored backgrounds */
+  --btn-fg-muted: 203 213 225;
+  /* slate-300 - for subtle states */
+  --btn-fg-warning: 254 243 199;
+  /* amber-100 - for warning variant on amber glass */
+
+  /* ================================================================
+     SEMANTIC FORM CONTROL TOKENS - Dark Theme
+     Purpose: Preserve glassmorphism with translucent white overlays
+     Design: Opacity-based for glass effect (works on dark backgrounds)
+     ================================================================ */
+
+  /* Backgrounds - Translucent glass */
+  --form-bg: 255 255 255 / 0.08;
+  /* White glass 8% opacity */
+  --form-bg-hover: 255 255 255 / 0.1;
+  /* 10% on hover */
+  --form-bg-focus: 255 255 255 / 0.12;
+  /* 12% on focus */
+  --form-bg-disabled: 255 255 255 / 0.04;
+  /* 4% when disabled */
+
+  /* Foreground Text */
+  --form-text: 255 255 255;
+  /* Pure white */
+  --form-text-placeholder: 255 255 255 / 0.4;
+  /* 40% opacity */
+  --form-text-disabled: 255 255 255 / 0.3;
+  /* 30% opacity */
+  --form-label: 255 255 255 / 0.7;
+  /* 70% opacity */
+  --form-helper: 255 255 255 / 0.5;
+  /* 50% opacity */
+
+  /* Borders - Translucent white */
+  --form-border: 255 255 255 / 0.12;
+  /* 12% opacity */
+  --form-border-hover: 255 255 255 / 0.16;
+  /* 16% on hover */
+  --form-border-focus: 255 255 255 / 0.24;
+  /* 24% on focus - stronger */
+  --form-border-disabled: 255 255 255 / 0.06;
+  /* 6% when disabled */
+
+  /* Focus Ring - Light blue accent */
+  --ring-focus: 147 197 253;
+  /* blue-300 - lighter for dark bg */
+  --ring-focus-shadow: 147 197 253;
+  /* Same for glow */
+  --ring-focus-offset: 15 23 42;
+  /* slate-900 */
+
+  /* Error State */
+  --form-error-border: 239 68 68 / 0.5;
+  /* red-500 translucent */
+  --form-error-ring: 239 68 68 / 0.3;
+  /* red-500 ring */
+  --form-error-bg: 239 68 68 / 0.1;
+  /* red-500 tint */
+  --form-error-text: 248 113 113;
+  /* red-400 - brighter for dark bg */
+
+  /* Success State */
+  --form-success-border: 34 197 94 / 0.5;
+  /* green-500 translucent */
+  --form-success-ring: 34 197 94 / 0.3;
+  /* green-500 ring */
+  --form-success-bg: 34 197 94 / 0.1;
+  /* green-500 tint */
+  --form-success-text: 74 222 128;
+  /* green-400 - brighter for dark bg */
+
+  /* ================================================================
+     GENERAL UI COMPONENT TOKENS - Dark Theme
+     Purpose: Preserve glassmorphism for panels, cards, nav, tabs, etc.
+     Design: Translucent white overlays for glass effect
+     ================================================================ */
+
+  /* Surface backgrounds - translucent glass */
+  --surface-bg: 255 255 255 / 0.06;
+  --surface-bg-subtle: 255 255 255 / 0.04;
+  --surface-bg-muted: 255 255 255 / 0.02;
+
+  /* Surface borders - translucent white */
+  --surface-border: 255 255 255 / 0.12;
+  --surface-border-subtle: 255 255 255 / 0.08;
+  --surface-border-strong: 255 255 255 / 0.2;
+
+  /* Interactive elements - translucent */
+  --interactive-bg: 255 255 255 / 0.08;
+  --interactive-bg-hover: 255 255 255 / 0.12;
+  --interactive-bg-active: 255 255 255 / 0.16;
+
+  /* Text hierarchy */
+  --text-primary: 255 255 255;
+  --text-secondary: 255 255 255 / 0.7;
+  --text-muted: 255 255 255 / 0.5;
+  --text-faint: 255 255 255 / 0.4;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-sans);
+  font-feature-settings: "rlig" 1, "calt" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
+}
+
+/* Code block styling */
+pre {
+  background: hsl(var(--muted)) !important;
+  border-radius: var(--radius);
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+code {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.875rem;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Selection */
+::selection {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+/* Custom Animations for Glass Components */
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes wave {
+  0% {
+    transform: translateX(-100%) skewX(-15deg);
+  }
+
+  100% {
+    transform: translateX(100%) skewX(-15deg);
+  }
+}
+
+@keyframes progress-stripes {
+  0% {
+    background-position: 1rem 0;
+  }
+
+  100% {
+    background-position: 0 0;
+  }
+}
+
+@keyframes indeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+@keyframes gradient-shift {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes bars {
+
+  0%,
+  40%,
+  100% {
+    transform: scaleY(0.4);
+  }
+
+  20% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes orbit {
+  0% {
+    transform: translateX(-50%) rotate(0deg) translateY(-100%);
+  }
+
+  100% {
+    transform: translateX(-50%) rotate(360deg) translateY(-100%);
+  }
+}
+
+@keyframes toast-progress {
+  from {
+    width: 100%;
+  }
+
+  to {
+    width: 0%;
+  }
+}
+
+/* Shake animation for error states */
+@keyframes shake {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-4px);
+  }
+
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+/* Ripple animation for button clicks */
+@keyframes ripple {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 0.5;
+  }
+
+  100% {
+    width: 400px;
+    height: 400px;
+    opacity: 0;
+  }
+}
+
+/* Pulse animation for badges and notifications */
+@keyframes pulse-soft {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+/* Subtle glow pulse */
+@keyframes glow-pulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+  }
+
+  50% {
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* ------------------------------------------------------------- */
+/* NEW ANIMATIONS FOR SPECIAL EFFECTS (GlassShineBorder, Meteors) */
+/* ------------------------------------------------------------- */
+
+/* Shine Border Animation */
+@keyframes shine {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-shine {
+  animation: shine var(--duration) linear infinite;
+}
+
+/* Meteor Animation */
+@keyframes meteor {
+  0% {
+    transform: rotate(215deg) translateX(0);
+    opacity: 1;
+  }
+
+  70% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: rotate(215deg) translateX(-500px);
+    opacity: 0;
+  }
+}
+
+.animate-meteor {
+  animation: meteor 5s linear infinite;
+}
+
+/* ------------------------------------------------------------- */
+/* 3D MICRO-INTERACTION ANIMATIONS */
+/* ------------------------------------------------------------- */
+
+/* Float animation for floating panels with 3D depth */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px) translateZ(0);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
+  }
+
+  50% {
+    transform: translateY(-10px) translateZ(10px);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.18);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* SlideIn animation for error messages with spring easing */
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  60% {
+    opacity: 1;
+    transform: translateY(2px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Enhanced shimmer for border shine */
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    background-position: 200% center;
+    opacity: 0;
+  }
+}
+
+/* Utility classes for perspective */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.perspective-500 {
+  perspective: 500px;
+}
+
+/* Blob micro-interactions */
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}

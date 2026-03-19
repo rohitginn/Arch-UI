@@ -1,0 +1,9 @@
+export { default as MeditationAppTemplate } from './MeditationAppTemplate.vue';
+export { default as PodcastNetworkTemplate } from './PodcastNetworkTemplate.vue';
+export { default as CybersecurityTemplate } from './CybersecurityTemplate.vue';
+export { default as LuxuryTravelTemplate } from './LuxuryTravelTemplate.vue';
+export { default as PhotographyStudioTemplate } from './PhotographyStudioTemplate.vue';
+export { default as B2bMarketingTemplate } from './B2bMarketingTemplate.vue';
+export { default as EventConferenceTemplate } from './EventConferenceTemplate.vue';
+export { default as DesignToolTemplate } from './DesignToolTemplate.vue';
+export { default as WeddingEventsTemplate } from './WeddingEventsTemplate.vue';

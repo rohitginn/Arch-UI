@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZenUI Vue Components - Test Playground</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-white dark:bg-slate-950 transition-colors duration-200">
+  <div id="app">
+    <div class="min-h-screen p-8">
+      <!-- Header with Theme Toggle -->
+      <div class="max-w-7xl mx-auto mb-8">
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-4xl font-bold text-slate-900 dark:text-white">
+              ZenUI Vue Components
+            </h1>
+            <p class="text-slate-600 dark:text-white/60 mt-2">
+              Comprehensive testing playground for all glassmorphic components
+            </p>
+          </div>
+          <button
+            @click="toggleTheme"
+            class="px-4 py-2 rounded-xl bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/15 transition-colors text-slate-900 dark:text-white"
+          >
+            {{ isDark ? '☀️ Light' : '🌙 Dark' }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Test Sections -->
+      <div class="max-w-7xl mx-auto space-y-12">
+        
+        <!-- Section: Text Visibility Test -->
+        <section class="space-y-4">
+          <h2 class="text-2xl font-semibold text-slate-900 dark:text-white">
+            🔍 Text Visibility Test
+          </h2>
+          <p class="text-slate-600 dark:text-white/60">
+            All text should be clearly visible in both light and dark themes
+          </p>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Test Card 1 -->
+            <div class="p-6 rounded-2xl backdrop-blur-lg bg-white/60 dark:bg-white/[0.06] border border-black/10 dark:border-white/10">
+              <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+                Card Title
+              </h3>
+              <p class="text-slate-600 dark:text-white/70">
+                This is body text. It should be readable in both themes.
+              </p>
+              <p class="text-sm text-slate-500 dark:text-white/50 mt-2">
+                This is secondary text with lower contrast.
+              </p>
+            </div>
+
+            <!-- Test Card 2 -->
+            <div class="p-6 rounded-2xl backdrop-blur-lg bg-white/70 dark:bg-black/40 border border-black/[0.06] dark:border-white/[0.08]">
+              <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+                Modal Style
+              </h3>
+              <p class="text-slate-600 dark:text-white/60">
+                Higher opacity background for better readability.
+              </p>
+            </div>
+
+            <!-- Test Card 3 -->
+            <div class="p-6 rounded-2xl backdrop-blur-xl bg-white/75 dark:bg-black/50 border border-black/[0.06] dark:border-white/[0.08]">
+              <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+                Navbar Style
+              </h3>
+              <p class="text-slate-600 dark:text-white/70">
+                Heavy blur with good text contrast.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section: Button Variants -->
+        <section class="space-y-4">
+          <h2 class="text-2xl font-semibold text-slate-900 dark:text-white">
+            🔘 Button Variants
+          </h2>
+          
+          <div class="flex flex-wrap gap-4">
+            <button class="px-4 py-2 rounded-xl backdrop-blur-md bg-white/60 dark:bg-white/[0.08] border border-black/[0.06] dark:border-white/[0.12] text-slate-900 dark:text-white hover:bg-white/80 dark:hover:bg-white/[0.12] transition-all">
+              Default
+            </button>
+            <button class="px-4 py-2 rounded-xl bg-blue-500 text-white hover:bg-blue-600 transition-colors">
+              Primary
+            </button>
+            <button class="px-4 py-2 rounded-xl bg-purple-500/20 dark:bg-purple-500/15 text-purple-700 dark:text-purple-200 border border-purple-400/30 hover:bg-purple-500/30 transition-all">
+              Secondary
+            </button>
+            <button class="px-4 py-2 rounded-xl bg-green-500/20 dark:bg-green-500/15 text-green-700 dark:text-green-200 border border-green-400/30 hover:bg-green-500/30 transition-all">
+              Success
+            </button>
+            <button class="px-4 py-2 rounded-xl bg-transparent hover:bg-black/[0.04] dark:hover:bg-white/[0.08] text-slate-900 dark:text-white border-transparent transition-all">
+              Ghost
+            </button>
+          </div>
+        </section>
+
+        <!-- Section: Input Fields -->
+        <section class="space-y-4">
+          <h2 class="text-2xl font-semibold text-slate-900 dark:text-white">
+            📝 Input Fields
+          </h2>
+          
+          <div class="max-w-md space-y-4">
+            <div class="relative">
+              <input
+                type="text"
+                placeholder="Enter text..."
+                class="w-full px-4 py-3 rounded-xl backdrop-blur-md bg-white/60 dark:bg-white/[0.06] border border-black/[0.1] dark:border-white/[0.12] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-black/[0.05] dark:focus:ring-white/[0.1] transition-all"
+              />
+            </div>
+            <div class="relative">
+              <input
+                type="text"
+                value="Filled input with value"
+                class="w-full px-4 py-3 rounded-xl backdrop-blur-md bg-black/[0.04] dark:bg-white/[0.08] border border-transparent text-slate-900 dark:text-white focus:bg-white/50 dark:focus:bg-white/[0.08] focus:outline-none transition-all"
+              />
+            </div>
+          </div>
+        </section>
+
+        <!-- Section: Navigation -->
+        <section class="space-y-4">
+          <h2 class="text-2xl font-semibold text-slate-900 dark:text-white">
+            🧭 Navigation Items
+          </h2>
+          
+          <div class="p-4 rounded-2xl backdrop-blur-xl bg-white/70 dark:bg-black/60 border border-black/[0.06] dark:border-white/[0.08]">
+            <nav class="flex gap-2">
+              <a href="#" class="px-3.5 py-2 rounded-full text-[13px] font-medium bg-black dark:bg-white text-white dark:text-black shadow-lg transition-all">
+                Active
+              </a>
+              <a href="#" class="px-3.5 py-2 rounded-full text-[13px] font-medium text-slate-900 dark:text-white/90 hover:bg-black/[0.04] dark:hover:bg-white/[0.1] transition-all">
+                Features
+              </a>
+              <a href="#" class="px-3.5 py-2 rounded-full text-[13px] font-medium text-slate-900 dark:text-white/90 hover:bg-black/[0.04] dark:hover:bg-white/[0.1] transition-all">
+                Pricing
+              </a>
+              <a href="#" class="px-3.5 py-2 rounded-full text-[13px] font-medium text-slate-900 dark:text-white/90 hover:bg-black/[0.04] dark:hover:bg-white/[0.1] transition-all">
+                About
+              </a>
+            </nav>
+          </div>
+        </section>
+
+        <!-- Section: Badges -->
+        <section class="space-y-4">
+          <h2 class="text-2xl font-semibold text-slate-900 dark:text-white">
+            🏷️ Badges
+          </h2>
+          
+          <div class="flex flex-wrap gap-3">
+            <span class="inline-flex items-center px-2.5 py-1 text-sm font-medium rounded-full backdrop-blur-sm bg-black/[0.05] dark:bg-white/[0.1] text-slate-700 dark:text-white/90 border border-black/[0.05] dark:border-white/[0.1]">
+              Default
+            </span>
+            <span class="inline-flex items-center px-2.5 py-1 text-sm font-medium rounded-full backdrop-blur-sm bg-blue-500/10 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300 border border-blue-500/20 dark:border-blue-400/30">
+              Primary
+            </span>
+            <span class="inline-flex items-center px-2.5 py-1 text-sm font-medium rounded-full backdrop-blur-sm bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-300 border border-green-500/20 dark:border-green-400/30">
+              Success
+            </span>
+            <span class="inline-flex items-center px-2.5 py-1 text-sm font-medium rounded-full backdrop-blur-sm bg-amber-500/10 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/20 dark:border-amber-400/30">
+              Warning
+            </span>
+            <span class="inline-flex items-center px-2.5 py-1 text-sm font-medium rounded-full backdrop-blur-sm bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-300 border border-red-500/20 dark:border-red-400/30">
+              Danger
+            </span>
+          </div>
+        </section>
+
+        <!-- Section: Alerts -->
+        <section class="space-y-4">
+          <h2 class="text-2xl font-semibold text-slate-900 dark:text-white">
+            ⚠️ Alerts
+          </h2>
+          
+          <div class="space-y-3 max-w-2xl">
+            <div class="flex gap-3 p-4 rounded-xl backdrop-blur-md bg-blue-50/90 dark:bg-blue-500/10 border border-blue-200/50 dark:border-blue-400/20">
+              <div class="flex-1">
+                <h4 class="font-semibold text-sm text-blue-900 dark:text-blue-100">Info Alert</h4>
+                <p class="text-sm text-blue-800 dark:text-blue-200 mt-1">This is an informational message.</p>
+              </div>
+            </div>
+            <div class="flex gap-3 p-4 rounded-xl backdrop-blur-md bg-green-50/90 dark:bg-green-500/10 border border-green-200/50 dark:border-green-400/20">
+              <div class="flex-1">
+                <h4 class="font-semibold text-sm text-green-900 dark:text-green-100">Success Alert</h4>
+                <p class="text-sm text-green-800 dark:text-green-200 mt-1">Operation completed successfully!</p>
+              </div>
+            </div>
+            <div class="flex gap-3 p-4 rounded-xl backdrop-blur-md bg-amber-50/90 dark:bg-amber-500/10 border border-amber-200/50 dark:border-amber-400/20">
+              <div class="flex-1">
+                <h4 class="font-semibold text-sm text-amber-900 dark:text-amber-100">Warning Alert</h4>
+                <p class="text-sm text-amber-800 dark:text-amber-200 mt-1">Please review this carefully.</p>
+              </div>
+            </div>
+            <div class="flex gap-3 p-4 rounded-xl backdrop-blur-md bg-red-50/90 dark:bg-red-500/10 border border-red-200/50 dark:border-red-400/20">
+              <div class="flex-1">
+                <h4 class="font-semibold text-sm text-red-900 dark:text-red-100">Error Alert</h4>
+                <p class="text-sm text-red-800 dark:text-red-200 mt-1">An error occurred. Please try again.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section: Summary -->
+        <section class="space-y-4">
+          <h2 class="text-2xl font-semibold text-slate-900 dark:text-white">
+            ✅ Test Summary
+          </h2>
+          <div class="p-6 rounded-2xl backdrop-blur-lg bg-white/60 dark:bg-white/[0.06] border border-black/10 dark:border-white/10">
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">
+              Component Text Visibility Status
+            </h3>
+            <ul class="space-y-2 text-slate-600 dark:text-white/70">
+              <li>✅ All text should be clearly visible in BOTH themes</li>
+              <li>✅ Light theme: Dark text (slate-900, slate-600, etc.)</li>
+              <li>✅ Dark theme: Light text (white, white/90, white/70, etc.)</li>
+              <li>✅ Proper contrast ratios for accessibility (WCAG 2.1 AA)</li>
+              <li>✅ Hover states maintain readability</li>
+            </ul>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          isDark: false
+        };
+      },
+      methods: {
+        toggleTheme() {
+          this.isDark = !this.isDark;
+          if (this.isDark) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        }
+      },
+      mounted() {
+        // Check system preference
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          this.isDark = true;
+          document.documentElement.classList.add('dark');
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>

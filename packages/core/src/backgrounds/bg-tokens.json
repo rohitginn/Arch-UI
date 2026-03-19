@@ -1,0 +1,119 @@
+{
+    "intensity": "0.5",
+    "speed": "1",
+    "density": "1",
+    "seed": "1234",
+    "overlay": "transparent",
+    "overlayOpacity": "0",
+    "templates": {
+        "topographicRibbonPlanes": {
+            "light": {
+                "base": "#f8fafc",
+                "accent": "#e2e8f0",
+                "edge": "#cbd5e1",
+                "blend": "normal",
+                "opacity": "0.8"
+            },
+            "dark": {
+                "base": "#0f172a",
+                "accent": "#1e293b",
+                "edge": "#334155",
+                "blend": "screen",
+                "opacity": "0.6"
+            },
+            "shared": {
+                "density": "6",
+                "offset": "40px",
+                "speed": "20s"
+            }
+        },
+        "photonField": {
+            "light": {
+                "base": "rgba(96, 165, 250, 0.4)",
+                "accent": "rgba(52, 211, 153, 0.5)",
+                "blend": "screen"
+            },
+            "dark": {
+                "base": "rgba(56, 189, 248, 0.6)",
+                "accent": "rgba(167, 139, 250, 0.7)",
+                "blend": "screen"
+            },
+            "shared": {
+                "count": "200",
+                "sizeMin": "1",
+                "sizeMax": "4",
+                "speed": "1s",
+                "trailLength": "0.8"
+            }
+        },
+        "kineticTessellation": {
+            "light": {
+                "base": "#ffffff",
+                "accent": "#f1f5f9",
+                "edge": "#e2e8f0"
+            },
+            "dark": {
+                "base": "#020617",
+                "accent": "#0f172a",
+                "edge": "#1e293b"
+            },
+            "shared": {
+                "size": "80px",
+                "speed": "10s",
+                "elevation": "0px",
+                "edgeSoftness": "1px"
+            }
+        },
+        "fluidLightscape": {
+            "light": {
+                "color1": "rgba(255, 255, 255, 0.5)",
+                "color2": "rgba(240, 249, 255, 0.6)",
+                "highlight": "rgba(255, 255, 255, 0.8)",
+                "causticIntensity": "0.4",
+                "grain": "0.03"
+            },
+            "dark": {
+                "color1": "rgba(30, 58, 138, 0.4)",
+                "color2": "rgba(88, 28, 135, 0.5)",
+                "highlight": "rgba(125, 211, 252, 0.3)",
+                "causticIntensity": "0.7",
+                "grain": "0.05"
+            },
+            "shared": {
+                "speed": "15s",
+                "contrast": "1"
+            }
+        },
+        "microEcosystem": {
+            "light": {
+                "base": "#dcfce7",
+                "accent": "#bbf7d0"
+            },
+            "dark": {
+                "base": "rgba(6, 78, 59, 0.4)",
+                "accent": "rgba(5, 150, 105, 0.5)"
+            },
+            "shared": {
+                "density": "50",
+                "scale": "1",
+                "growthSpeed": "8s"
+            }
+        },
+        "typographicAtmos": {
+            "light": {
+                "base": "rgba(0, 0, 0, 0.03)",
+                "accent": "rgba(0, 0, 0, 0.05)"
+            },
+            "dark": {
+                "base": "rgba(255, 255, 255, 0.02)",
+                "accent": "rgba(255, 255, 255, 0.04)"
+            },
+            "shared": {
+                "scale": "10vw",
+                "density": "10",
+                "blur": "2px",
+                "speed": "30s"
+            }
+        }
+    }
+}

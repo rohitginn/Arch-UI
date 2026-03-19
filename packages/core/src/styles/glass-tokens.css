@@ -1,0 +1,341 @@
+/*
+ * ZenUI Glass Tokens
+ * CSS Custom Properties for glassmorphic effects
+ */
+
+:root {
+  /* ═══ Accent System (default: Ember) ═══ */
+  --accent-primary: #f59e0b;
+  --accent-hover: #d97706;
+  --accent-subtle: rgba(245, 158, 11, 0.10);
+  --accent-foreground: #ffffff;
+
+  /* ═══ Motion Tokens ═══ */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-sharp: cubic-bezier(0.0, 0, 0.2, 1);
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 350ms;
+
+  /* Glass Blur Levels */
+  --glass-blur-sm: 8px;
+  --glass-blur-md: 12px;
+  --glass-blur-lg: 16px;
+  --glass-blur-xl: 24px;
+
+  /* Glass Backgrounds - Light Mode */
+  --glass-bg-light: rgba(255, 255, 255, 0.7);
+  --glass-bg-light-hover: rgba(255, 255, 255, 0.8);
+  --glass-bg-light-active: rgba(255, 255, 255, 0.9);
+
+  /* Glass Backgrounds - Dark Mode */
+  --glass-bg-dark: rgba(255, 255, 255, 0.05);
+  --glass-bg-dark-hover: rgba(255, 255, 255, 0.08);
+  --glass-bg-dark-active: rgba(255, 255, 255, 0.12);
+
+  /* Glass Borders */
+  --glass-border-light: rgba(255, 255, 255, 0.3);
+  --glass-border-dark: rgba(255, 255, 255, 0.1);
+  --glass-border-hover: rgba(255, 255, 255, 0.2);
+
+  /* Glass Shadows - Multi-layer for depth */
+  --glass-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --glass-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12),
+    0 2px 4px rgba(0, 0, 0, 0.08);
+  --glass-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.15),
+    0 4px 8px rgba(0, 0, 0, 0.1);
+  --glass-shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.2),
+    0 8px 16px rgba(0, 0, 0, 0.12);
+
+  /* Glass Glow Effects */
+  --glass-glow-sm: 0 0 20px rgba(255, 255, 255, 0.1);
+  --glass-glow-md: 0 0 30px rgba(255, 255, 255, 0.1);
+  --glass-glow-lg: 0 0 40px rgba(255, 255, 255, 0.15);
+
+  /* Transition Timing */
+  --glass-transition: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --glass-transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --glass-transition-spring: 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* ── Interactive Glass Tokens ─────────────────────────── */
+
+/* Light mode (default) */
+:root:not(.dark) {
+  --glass-bg: var(--glass-bg-light);
+  --glass-bg-hover: var(--glass-bg-light-hover);
+  --glass-bg-active: var(--glass-bg-light-active);
+  --glass-border: var(--glass-border-light);
+
+  /* ─ Interactive surfaces ─ */
+  --glass-surface: var(--surface-bg-subtle, rgba(255, 255, 255, 0.72));
+  --glass-surface-hover: var(--surface-bg-hover, rgba(255, 255, 255, 0.82));
+  --glass-surface-active: var(--surface-bg-active, rgba(245, 247, 250, 0.92));
+  --glass-surface-elevated: var(--surface-bg, rgba(255, 255, 255, 0.85));
+
+  /* ─ Interactive text ─ */
+  --glass-text: var(--text-primary, #0f172a);
+  --glass-text-secondary: var(--text-secondary, #475569);
+  --glass-text-muted: var(--form-helper, #64748b);
+  --glass-text-placeholder: var(--form-placeholder, #94a3b8);
+
+  /* ─ Interactive borders ─ */
+  --glass-edge: var(--surface-border, rgba(0, 0, 0, 0.08));
+  --glass-edge-hover: var(--surface-border-hover, rgba(0, 0, 0, 0.14));
+  --glass-edge-strong: var(--surface-border-strong, rgba(0, 0, 0, 0.18));
+  --glass-divider: var(--surface-border, rgba(0, 0, 0, 0.06));
+
+  /* ─ Interactive shadows ─ */
+  --glass-depth-sm: 0 2px 8px -2px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --glass-depth-md: 0 4px 20px -4px rgba(0, 0, 0, 0.10), 0 2px 4px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  --glass-depth-lg: 0 12px 40px -8px rgba(0, 0, 0, 0.14), 0 4px 6px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.06);
+
+  /* ─ Highlight / inset shine ─ */
+  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -1px 0 rgba(0, 0, 0, 0.02);
+
+  /* ─ Status / accent colors (accent system aware) ─ */
+  --glass-accent: var(--accent-primary, #3b82f6);
+  --glass-accent-hover: var(--accent-hover, #2563eb);
+  --glass-success: #10b981;
+  --glass-warning: #f59e0b;
+  --glass-error: #ef4444;
+  --glass-info: #3b82f6;
+
+  /* ─ Variant: solid ─ */
+  --glass-solid-bg: rgba(255, 255, 255, 0.92);
+  --glass-solid-bg-hover: rgba(255, 255, 255, 0.96);
+  --glass-solid-border: rgba(0, 0, 0, 0.10);
+  --glass-solid-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 0, 0, 0.06);
+
+  /* ─ Variant: bordered ─ */
+  --glass-bordered-bg: rgba(255, 255, 255, 0.35);
+  --glass-bordered-bg-hover: rgba(255, 255, 255, 0.50);
+  --glass-bordered-border: rgba(0, 0, 0, 0.14);
+  --glass-bordered-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+/* Dark mode */
+.dark {
+  --glass-bg: var(--glass-bg-dark);
+  --glass-bg-hover: var(--glass-bg-dark-hover);
+  --glass-bg-active: var(--glass-bg-dark-active);
+  --glass-border: var(--glass-border-dark);
+
+  /* ─ Interactive surfaces ─ */
+  --glass-surface: var(--surface-bg, rgba(255, 255, 255, 0.05));
+  --glass-surface-hover: var(--surface-bg-hover, rgba(255, 255, 255, 0.08));
+  --glass-surface-active: var(--surface-bg-active, rgba(255, 255, 255, 0.12));
+  --glass-surface-elevated: var(--surface-bg-subtle, rgba(255, 255, 255, 0.07));
+
+  /* ─ Interactive text ─ */
+  --glass-text: var(--text-primary, #f8fafc);
+  --glass-text-secondary: var(--text-secondary, #94a3b8);
+  --glass-text-muted: var(--form-helper, #64748b);
+  --glass-text-placeholder: var(--form-placeholder, #475569);
+
+  /* ─ Interactive borders ─ */
+  --glass-edge: var(--surface-border, rgba(255, 255, 255, 0.08));
+  --glass-edge-hover: var(--surface-border-hover, rgba(255, 255, 255, 0.14));
+  --glass-edge-strong: var(--surface-border-strong, rgba(255, 255, 255, 0.20));
+  --glass-divider: var(--surface-border, rgba(255, 255, 255, 0.06));
+
+  /* ─ Interactive shadows ─ */
+  --glass-depth-sm: 0 2px 8px -2px rgba(0, 0, 0, 0.30), 0 1px 2px rgba(0, 0, 0, 0.20);
+  --glass-depth-md: 0 4px 20px -4px rgba(0, 0, 0, 0.40), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --glass-depth-lg: 0 12px 40px -8px rgba(0, 0, 0, 0.50), 0 0 0 1px rgba(255, 255, 255, 0.08);
+
+  /* ─ Highlight / inset shine ─ */
+  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.06), inset 0 -1px 0 rgba(0, 0, 0, 0.10);
+
+  /* ─ Status / accent colors (accent system aware) ─ */
+  --glass-accent: var(--accent-primary, #60a5fa);
+  --glass-accent-hover: var(--accent-hover, #93c5fd);
+  --glass-success: #34d399;
+  --glass-warning: #fbbf24;
+  --glass-error: #f87171;
+  --glass-info: #60a5fa;
+
+  /* ─ Variant: solid ─ */
+  --glass-solid-bg: rgba(15, 23, 42, 0.85);
+  --glass-solid-bg-hover: rgba(15, 23, 42, 0.90);
+  --glass-solid-border: rgba(255, 255, 255, 0.12);
+  --glass-solid-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.50), 0 0 0 1px rgba(255, 255, 255, 0.08);
+
+  /* ─ Variant: bordered ─ */
+  --glass-bordered-bg: rgba(255, 255, 255, 0.03);
+  --glass-bordered-bg-hover: rgba(255, 255, 255, 0.06);
+  --glass-bordered-border: rgba(255, 255, 255, 0.14);
+  --glass-bordered-shadow: 0 1px 3px rgba(0, 0, 0, 0.20);
+}
+
+/* Semantic Theme Tokens */
+@layer base {
+  :root {
+    /* Surface Colors - Light Mode (High Contrast) */
+    --surface-bg: #ffffff;
+    --surface-bg-subtle: #f8fafc;
+    --surface-bg-hover: #f1f5f9;
+    --surface-bg-active: #e2e8f0;
+
+    /* Surface Borders - Light Mode */
+    --surface-border: #e2e8f0;
+    --surface-border-strong: #cbd5e1;
+    --surface-border-hover: #94a3b8;
+
+    /* Text Colors - Light Mode */
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+
+    /* Form Backgrounds */
+    --form-bg: #ffffff;
+    --form-bg-hover: #f8fafc;
+    --form-bg-focus: #ffffff;
+    --form-bg-disabled: #f1f5f9;
+
+    /* Form Text */
+    --form-text: #0f172a;
+    --form-label: #475569;
+    --form-placeholder: #94a3b8;
+    --form-helper: #64748b;
+    --form-error-text: #ef4444;
+
+    /* Form Borders */
+    --form-border: #e2e8f0;
+    --form-border-hover: #cbd5e1;
+    --form-border-focus: #3b82f6;
+    --form-border-disabled: #e2e8f0;
+    --form-error-border: #fca5a5;
+    --form-error-ring: #fee2e2;
+
+    /* Rings / Glows */
+    --ring-focus: #3b82f6;
+    --ring-offset: #ffffff;
+  }
+
+  .dark {
+    /* Surface Colors - Dark Mode (Glass Adaptation) */
+    --surface-bg: rgba(255, 255, 255, 0.05);
+    --surface-bg-subtle: rgba(255, 255, 255, 0.03);
+    --surface-bg-hover: rgba(255, 255, 255, 0.08);
+    --surface-bg-active: rgba(255, 255, 255, 0.12);
+
+    /* Surface Borders - Dark Mode */
+    --surface-border: rgba(255, 255, 255, 0.1);
+    --surface-border-strong: rgba(255, 255, 255, 0.15);
+    --surface-border-hover: rgba(255, 255, 255, 0.2);
+
+    /* Text Colors - Dark Mode */
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+
+    /* Form Backgrounds */
+    --form-bg: rgba(255, 255, 255, 0.03);
+    --form-bg-hover: rgba(255, 255, 255, 0.06);
+    --form-bg-focus: rgba(255, 255, 255, 0.08);
+    --form-bg-disabled: rgba(255, 255, 255, 0.02);
+
+    /* Form Text */
+    --form-text: #f8fafc;
+    --form-label: #cbd5e1;
+    --form-placeholder: #64748b;
+    --form-helper: #94a3b8;
+    --form-error-text: #f87171;
+
+    /* Form Borders */
+    --form-border: rgba(255, 255, 255, 0.1);
+    --form-border-hover: rgba(255, 255, 255, 0.2);
+    --form-border-focus: #60a5fa;
+    --form-border-disabled: rgba(255, 255, 255, 0.05);
+    --form-error-border: rgba(239, 68, 68, 0.5);
+    --form-error-ring: rgba(239, 68, 68, 0.2);
+
+    /* Rings / Glows */
+    --ring-focus: #60a5fa;
+    --ring-offset: #0f172a;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   Accent Theme Presets
+   Apply via data-accent attribute on root
+   ═══════════════════════════════════════════ */
+
+[data-accent="ember"] {
+  --accent-primary: #f59e0b;
+  --accent-hover: #d97706;
+  --accent-subtle: rgba(245, 158, 11, 0.10);
+  --accent-foreground: #ffffff;
+}
+.dark[data-accent="ember"], .dark [data-accent="ember"] {
+  --accent-primary: #fbbf24;
+  --accent-hover: #f59e0b;
+}
+
+[data-accent="graphite"] {
+  --accent-primary: #52525b;
+  --accent-hover: #3f3f46;
+  --accent-subtle: rgba(82, 82, 91, 0.10);
+  --accent-foreground: #ffffff;
+}
+.dark[data-accent="graphite"], .dark [data-accent="graphite"] {
+  --accent-primary: #a1a1aa;
+  --accent-hover: #d4d4d8;
+}
+
+[data-accent="slate"] {
+  --accent-primary: #475569;
+  --accent-hover: #334155;
+  --accent-subtle: rgba(71, 85, 105, 0.10);
+  --accent-foreground: #ffffff;
+}
+.dark[data-accent="slate"], .dark [data-accent="slate"] {
+  --accent-primary: #94a3b8;
+  --accent-hover: #cbd5e1;
+}
+
+[data-accent="sage"] {
+  --accent-primary: #059669;
+  --accent-hover: #047857;
+  --accent-subtle: rgba(5, 150, 105, 0.10);
+  --accent-foreground: #ffffff;
+}
+.dark[data-accent="sage"], .dark [data-accent="sage"] {
+  --accent-primary: #34d399;
+  --accent-hover: #6ee7b7;
+}
+
+[data-accent="crimson"] {
+  --accent-primary: #dc2626;
+  --accent-hover: #b91c1c;
+  --accent-subtle: rgba(220, 38, 38, 0.10);
+  --accent-foreground: #ffffff;
+}
+.dark[data-accent="crimson"], .dark [data-accent="crimson"] {
+  --accent-primary: #f87171;
+  --accent-hover: #fca5a5;
+}
+
+[data-accent="dusk"] {
+  --accent-primary: #57534e;
+  --accent-hover: #44403c;
+  --accent-subtle: rgba(87, 83, 78, 0.10);
+  --accent-foreground: #ffffff;
+}
+.dark[data-accent="dusk"], .dark [data-accent="dusk"] {
+  --accent-primary: #a8a29e;
+  --accent-hover: #d6d3d1;
+}
+
+[data-accent="iron"] {
+  --accent-primary: #525252;
+  --accent-hover: #404040;
+  --accent-subtle: rgba(82, 82, 82, 0.10);
+  --accent-foreground: #ffffff;
+}
+.dark[data-accent="iron"], .dark [data-accent="iron"] {
+  --accent-primary: #a3a3a3;
+  --accent-hover: #d4d4d4;
+}

@@ -1,0 +1,135 @@
+/*
+ * ArchUI Background System Tokens
+ * CSS Custom Properties for 6 original background templates
+ */
+
+:root {
+    /* =======================================
+     Global Background System Tokens
+     ======================================= */
+    --bg-intensity: 0.5;
+    --bg-speed: 1;
+    --bg-density: 1;
+    --bg-seed: 1234;
+    --bg-overlay: transparent;
+    --bg-overlay-opacity: 0;
+
+    /* =======================================
+     A: Topographic Ribbon Planes
+     ======================================= */
+    /* Colors */
+    --bg-ribbon-base: #f8fafc;
+    --bg-ribbon-accent: #e2e8f0;
+    --bg-ribbon-edge: #cbd5e1;
+    /* Config */
+    --bg-ribbon-density: 6;
+    /* number of layers */
+    --bg-ribbon-offset: 40px;
+    /* parallax offset */
+    --bg-ribbon-speed: 20s;
+    --bg-ribbon-opacity: 0.8;
+    --bg-ribbon-blend: normal;
+
+    /* =======================================
+     B: Photon Field
+     ======================================= */
+    --bg-photon-base: rgba(96, 165, 250, 0.4);
+    --bg-photon-accent: rgba(52, 211, 153, 0.5);
+    --bg-photon-count: 200;
+    --bg-photon-size-min: 1;
+    --bg-photon-size-max: 4;
+    --bg-photon-speed: 1s;
+    --bg-photon-trail-length: 0.8;
+    /* 0-1 multiplier */
+    --bg-photon-blend: screen;
+
+    /* =======================================
+     C: Kinetic Tessellation
+     ======================================= */
+    --bg-tile-base: #ffffff;
+    --bg-tile-accent: #f1f5f9;
+    --bg-tile-edge: #e2e8f0;
+    --bg-tile-size: 80px;
+    --bg-tile-speed: 10s;
+    --bg-tile-elevation: 0px;
+    --bg-tile-edge-softness: 1px;
+
+    /* =======================================
+     D: Fluid Lightscape
+     ======================================= */
+    --bg-fluid-color1: rgba(255, 255, 255, 0.5);
+    --bg-fluid-color2: rgba(240, 249, 255, 0.6);
+    --bg-fluid-highlight: rgba(255, 255, 255, 0.8);
+    --bg-fluid-speed: 15s;
+    --bg-fluid-contrast: 1;
+    --bg-fluid-caustic-intensity: 0.4;
+    --bg-fluid-grain: 0.03;
+
+    /* =======================================
+     E: Micro-Ecosystem
+     ======================================= */
+    --bg-eco-base: #dcfce7;
+    --bg-eco-accent: #bbf7d0;
+    --bg-eco-density: 50;
+    --bg-eco-scale: 1;
+    --bg-eco-growth-speed: 8s;
+
+    /* =======================================
+     F: Typographic Atmos
+     ======================================= */
+    --bg-typo-base: rgba(0, 0, 0, 0.03);
+    --bg-typo-accent: rgba(0, 0, 0, 0.05);
+    --bg-typo-scale: 10vw;
+    --bg-typo-density: 10;
+    --bg-typo-blur: 2px;
+    --bg-typo-speed: 30s;
+}
+
+/* =======================================
+   DARK MODE TOKENS
+   ======================================= */
+.dark {
+    /* =======================================
+     A: Topographic Ribbon Planes
+     ======================================= */
+    --bg-ribbon-base: #0f172a;
+    --bg-ribbon-accent: #1e293b;
+    --bg-ribbon-edge: #334155;
+    --bg-ribbon-opacity: 0.6;
+    --bg-ribbon-blend: screen;
+
+    /* =======================================
+     B: Photon Field
+     ======================================= */
+    --bg-photon-base: rgba(56, 189, 248, 0.6);
+    --bg-photon-accent: rgba(167, 139, 250, 0.7);
+    --bg-photon-blend: screen;
+
+    /* =======================================
+     C: Kinetic Tessellation
+     ======================================= */
+    --bg-tile-base: #020617;
+    --bg-tile-accent: #0f172a;
+    --bg-tile-edge: #1e293b;
+
+    /* =======================================
+     D: Fluid Lightscape
+     ======================================= */
+    --bg-fluid-color1: rgba(30, 58, 138, 0.4);
+    --bg-fluid-color2: rgba(88, 28, 135, 0.5);
+    --bg-fluid-highlight: rgba(125, 211, 252, 0.3);
+    --bg-fluid-caustic-intensity: 0.7;
+    --bg-fluid-grain: 0.05;
+
+    /* =======================================
+     E: Micro-Ecosystem
+     ======================================= */
+    --bg-eco-base: rgba(6, 78, 59, 0.4);
+    --bg-eco-accent: rgba(5, 150, 105, 0.5);
+
+    /* =======================================
+     F: Typographic Atmos
+     ======================================= */
+    --bg-typo-base: rgba(255, 255, 255, 0.02);
+    --bg-typo-accent: rgba(255, 255, 255, 0.04);
+}

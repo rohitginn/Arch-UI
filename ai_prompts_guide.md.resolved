@@ -1,0 +1,502 @@
+# ZenUI - AI Implementation Prompts
+## How to Use AI to Build This Project
+
+---
+
+## 📋 Overview
+
+This guide contains ready-to-use prompts for AI assistants (Claude, ChatGPT, Gemini, Copilot, etc.) to build ZenUI step by step.
+
+---
+
+## 🎯 Strategy: How to Work with AI
+
+### Best Practices
+
+1. **Work in phases** - Don't try to build everything at once
+2. **One task at a time** - Give focused, specific prompts
+3. **Share context** - Paste relevant sections of the PDR
+4. **Iterate** - Review output, ask for refinements
+5. **Test as you go** - Verify each component works before moving on
+
+### Prompt Structure
+
+```
+[CONTEXT]
+Brief background about the project
+
+[TASK]
+Specific thing you want the AI to do
+
+[REQUIREMENTS]
+Technical specifications and constraints
+
+[OUTPUT]
+What format you want the response in
+```
+
+---
+
+## 🚀 Phase 1: Project Setup
+
+### Prompt 1.1: Initialize Monorepo
+
+```
+I'm building a UI component library called "ZenUI" - similar to shadcn/ui but with glassmorphic components as the key differentiator.
+
+Help me set up a pnpm monorepo with Turborepo.
+
+Requirements:
+- pnpm workspace with packages/ and apps/ directories
+- Turborepo for build orchestration
+- TypeScript 5.0+ with strict mode
+- ESLint + Prettier configuration
+
+Create these files:
+1. package.json (root)
+2. pnpm-workspace.yaml
+3. turbo.json
+4. tsconfig.json (base)
+5. .eslintrc.js
+6. .prettierrc
+
+Use latest stable versions of all dependencies.
+```
+
+### Prompt 1.2: Create Core Package
+
+```
+Create the @zenui/core package for my UI library monorepo.
+
+This package contains shared utilities used by all framework-specific packages.
+
+Create these files in packages/core/:
+
+1. package.json - with tsup for building, exports for ESM/CJS
+2. tsconfig.json
+3. src/utils/cn.ts - className merge utility using clsx + tailwind-merge
+4. src/constants/design-tokens.ts - design tokens for glassmorphism:
+   - Glass blur levels (sm: 8px, md: 12px, lg: 16px, xl: 24px)
+   - Glass background colors (light/dark mode)
+   - Glass border colors
+   - Glass shadows (multi-layer for depth)
+   - Animation durations and easing functions
+5. src/types/index.ts - shared TypeScript types
+6. src/index.ts - main export file
+
+Use TypeScript with strict mode.
+```
+
+### Prompt 1.3: Create React Package Structure
+
+```
+Create the @zenui/react package structure for my UI library.
+
+Requirements:
+- TypeScript with strict mode
+- tsup for building (ESM + CJS output)
+- Peer dependencies: react 18+, react-dom 18+
+- Dependencies: @zenui/core (workspace), class-variance-authority
+- Folder structure for components organized by category
+
+Create:
+1. packages/react/package.json
+2. packages/react/tsconfig.json
+3. packages/react/src/index.ts
+4. packages/react/src/components/glassmorphic/index.ts
+
+The glassmorphic folder will contain our priority components.
+```
+
+---
+
+## 🎨 Phase 2: Glassmorphic Components
+
+### Prompt 2.1: Glass Card Component
+
+```
+Create a GlassCard component for my React UI library (@zenui/react).
+
+Design specifications:
+- Frosted glass effect with backdrop-blur
+- Multiple variants: default, bordered, gradient, glow
+- Blur intensity options: sm, md, lg, xl
+- Size options: sm, md, lg, xl (affects padding)
+- Optional "animated" prop for hover scale effect
+- Optional "shine" prop for hover shine animation
+
+Technical requirements:
+- Use class-variance-authority (cva) for variant management
+- Use the cn() utility from @zenui/core for class merging
+- Use Tailwind CSS classes only
+- Forward ref properly with React.forwardRef
+- Full TypeScript types exported
+- Accessible (proper ARIA if needed)
+
+CSS values for glass effect:
+- Background: bg-white/5 (dark mode)
+- Border: border-white/10
+- Blur: backdrop-blur-lg (16px default)
+- Shadow: shadow-lg or custom glow shadow
+- Hover: increase opacity slightly
+
+Create:
+1. packages/react/src/components/glassmorphic/glass-card/glass-card.tsx
+2. packages/react/src/components/glassmorphic/glass-card/index.ts
+
+Include JSDoc comments and usage examples in comments.
+```
+
+### Prompt 2.2: Glass Button Component
+
+```
+Create a GlassButton component for my React UI library.
+
+Design specifications:
+- Glass/frosted button with backdrop blur
+- Variants: default, primary, success, danger, ghost
+- Sizes: sm, md, lg, xl, icon
+- Optional "glow" prop for hover glow effect
+- Optional "magnetic" prop for cursor-following effect
+- Loading state with spinner
+- Support for left/right icons
+
+Technical requirements:
+- Use cva for variants
+- Use cn() from @zenui/core
+- Tailwind CSS only
+- React.forwardRef
+- Full TypeScript types
+- Accessible: proper focus states, aria-disabled when loading
+
+Styling:
+- Base: backdrop-blur-md, border-white/20, rounded-xl
+- Focus: visible ring with offset
+- Active: scale-[0.98] for press feedback
+- Disabled: opacity-50, pointer-events-none
+
+Create the component file with all features implemented.
+```
+
+### Prompt 2.3: Glass Input Component
+
+```
+Create a GlassInput component for my React UI library.
+
+Design specifications:
+- Glass/frosted input field with backdrop blur
+- Floating label that animates on focus
+- Variants: default, filled, underline
+- States: default, focus, error, success, disabled
+- Support for left/right icons/addons
+- Optional character count
+
+Technical requirements:
+- Use cva for variants
+- Tailwind CSS only
+- Proper accessibility: labels, aria-invalid, aria-describedby
+- Controlled and uncontrolled modes
+- Forward ref to the actual input element
+
+Styling:
+- Background: bg-white/5
+- Border: border-white/10, focus:border-white/30
+- Focus: ring effect with glow
+- Placeholder: text-white/40
+- Label: animate from inside to top on focus
+
+Create the complete component with TypeScript types.
+```
+
+### Prompt 2.4: Glass Modal Component
+
+```
+Create a GlassModal component for my React UI library.
+
+Design specifications:
+- Glassmorphic modal dialog with frosted background
+- Backdrop with blur effect
+- Sizes: sm, md, lg, xl, full
+- Smooth open/close animations (fade + scale)
+- Close on overlay click (optional)
+- Close on Escape key
+
+Technical requirements:
+- Use React Portal (createPortal)
+- Focus trap when open
+- Scroll lock on body when open
+- Proper accessibility: role="dialog", aria-modal, aria-labelledby
+- Return focus to trigger element on close
+- Compound component pattern: Modal, Modal.Trigger, Modal.Content, Modal.Header, Modal.Footer
+
+Styling:
+- Overlay: bg-black/60, backdrop-blur-sm
+- Content: glass card styling with glow variant
+- Animations: animate-in, fade-in, zoom-in-95
+
+Create the complete component with all features.
+```
+
+### Prompt 2.5: Remaining Glassmorphic Components
+
+Use similar prompts for:
+- Glass Navigation (navbar with glass effect)
+- Glass Sidebar (side panel with glass)
+- Glass Dropdown (dropdown menu with glass)
+- Glass Panel (floating panel)
+
+---
+
+## 📖 Phase 3: Documentation Site
+
+### Prompt 3.1: Setup Astro Docs Site
+
+```
+Help me create a documentation site for ZenUI using Astro.
+
+Requirements:
+- Astro with React integration for interactive components
+- Tailwind CSS for styling
+- MDX support for component documentation
+- Dark mode by default
+- Layout similar to shadcn/ui:
+  - Left sidebar with component navigation
+  - Main content area
+  - Right sidebar with "On This Page" TOC
+
+Create the base structure in apps/docs/:
+1. astro.config.mjs
+2. tailwind.config.js (with glass effect utilities)
+3. src/layouts/DocsLayout.astro
+4. src/components/Sidebar.astro
+5. src/components/TableOfContents.astro
+6. src/styles/globals.css
+
+The design should be dark, premium, with glass effects on the navigation.
+```
+
+### Prompt 3.2: Component Preview System
+
+```
+Create a component preview system for my documentation site.
+
+This system should show:
+1. Live rendered component preview
+2. Framework tabs (React / Vue)
+3. Theme toggle (light/dark)
+4. Viewport size buttons (mobile/tablet/desktop)
+5. Code block with syntax highlighting and copy button
+
+Technical approach:
+- Use iframe sandbox for isolated preview
+- Generate preview HTML dynamically
+- Include Tailwind CSS via CDN in iframe
+- Use React for the preview container component
+- Use prism-react-renderer for code highlighting
+
+Create these React components for the Astro docs site:
+1. PreviewContainer.tsx - main wrapper
+2. PreviewToolbar.tsx - tabs and buttons
+3. PreviewFrame.tsx - iframe with preview
+4. CodeBlock.tsx - syntax highlighted code
+
+All components should have the glass effect styling.
+```
+
+---
+
+## 🔧 Phase 4: CLI Tool
+
+### Prompt 4.1: Create CLI Package
+
+```
+Create a CLI tool for ZenUI that works like shadcn/ui's CLI.
+
+Commands needed:
+1. zenui init - Initialize ZenUI in a project
+2. zenui add <component> - Add a component to the project
+3. zenui list - List all available components
+
+Technical requirements:
+- Use Commander.js for CLI framework
+- Use prompts for interactive questions
+- Use chalk for colored output
+- Use ora for spinners
+- TypeScript with tsup for building
+
+For "init" command:
+- Detect framework (React/Vue/Next/Nuxt)
+- Create zenui.json config file
+- Setup Tailwind config with glass utilities
+- Create components directory
+
+For "add" command:
+- Fetch component from registry
+- Install dependencies
+- Write component files to project
+- Transform paths based on user's config
+
+Create the CLI package structure in packages/cli/
+```
+
+---
+
+## 📦 Phase 5: Build & Publish
+
+### Prompt 5.1: CI/CD Setup
+
+```
+Create GitHub Actions workflows for my ZenUI monorepo.
+
+Workflows needed:
+
+1. CI (on push/PR):
+   - Install dependencies (pnpm)
+   - Lint all packages
+   - Type check all packages
+   - Run tests
+   - Build all packages
+
+2. Release (on version tag):
+   - Build all packages
+   - Publish to npm with provenance
+   - Create GitHub release
+
+3. Preview Deployments (on PR):
+   - Build docs site
+   - Deploy to Vercel preview
+
+Create:
+- .github/workflows/ci.yml
+- .github/workflows/release.yml
+- .github/workflows/preview.yml
+
+Use pnpm and caching for speed.
+```
+
+---
+
+## 💡 Tips for Better AI Results
+
+### Be Specific About Styling
+
+```
+Instead of: "Make it look good"
+
+Say: "Use these exact Tailwind classes:
+- Background: bg-white/5
+- Border: border border-white/10
+- Blur: backdrop-blur-lg
+- Shadow: shadow-[0_8px_32px_rgba(0,0,0,0.12)]
+- Hover: hover:bg-white/8
+- Transition: transition-all duration-200"
+```
+
+### Ask for Iterations
+
+```
+"The component looks good, but:
+1. The hover effect is too subtle - increase opacity change
+2. Add a subtle border glow on focus
+3. Make the animation easing more bouncy
+4. Add aria-label for accessibility"
+```
+
+### Request Complete Files
+
+```
+"Give me the COMPLETE file, not just snippets. Include:
+- All imports
+- All TypeScript types
+- The full component implementation
+- Export statements
+- JSDoc comments with examples"
+```
+
+### Share Previous Context
+
+```
+"Here's my existing cn utility:
+[paste code]
+
+Here's my design tokens:
+[paste code]
+
+Now create a new component that uses these exact utilities."
+```
+
+---
+
+## 📄 Quick Reference: Core Specs
+
+### Glass Effect Values
+```
+Blur: backdrop-blur-lg (16px)
+Background Dark: bg-white/5
+Background Light: bg-white/70
+Border: border-white/10
+Shadow: shadow-lg or 0_8px_32px_rgba(0,0,0,0.12)
+Hover Background: bg-white/8
+```
+
+### File Naming
+```
+component-name/
+  component-name.tsx
+  component-name.test.tsx
+  index.ts
+```
+
+### Export Pattern
+```typescript
+export { ComponentName, componentVariants } from './component-name';
+export type { ComponentNameProps } from './component-name';
+```
+
+### Component Structure
+```typescript
+import * as React from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '@zenui/core';
+
+const variants = cva('base-classes', { variants: {...} });
+
+interface Props extends VariantProps<typeof variants> {...}
+
+const Component = React.forwardRef<HTMLElement, Props>(
+  ({ className, ...props }, ref) => {
+    return <element ref={ref} className={cn(variants(), className)} {...props} />;
+  }
+);
+
+Component.displayName = 'Component';
+export { Component, variants };
+```
+
+---
+
+## 🔄 Workflow Summary
+
+1. **Start session**: Share project context + current phase
+2. **Give specific prompt**: One task at a time
+3. **Review output**: Check code quality and completeness
+4. **Iterate**: Ask for fixes or improvements
+5. **Test**: Run the code, report any errors
+6. **Move on**: Proceed to next prompt
+
+**Example session start:**
+
+```
+I'm building ZenUI, a glassmorphic UI component library. 
+Here's my current project structure: [paste]
+Here's my design tokens: [paste]
+
+I've completed: Glass Card, Glass Button
+Currently working on: Glass Input
+
+[Your specific prompt here]
+```
+
+---
+
+Good luck building ZenUI! 🚀

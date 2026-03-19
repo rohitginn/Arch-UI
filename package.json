@@ -1,0 +1,43 @@
+{
+  "name": "archui",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Modern, framework-agnostic UI component library with glassmorphic design",
+  "author": "ZenUI Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zenui/zenui.git"
+  },
+  "keywords": [
+    "ui",
+    "components",
+    "react",
+    "vue",
+    "glassmorphism",
+    "tailwind",
+    "design-system"
+  ],
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "clean": "turbo clean && rimraf node_modules",
+    "format": "prettier --write \"**/*.{ts,tsx,vue,md,json}\"",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "turbo build --filter=./packages/* && changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1",
+    "prettier": "^3.2.4",
+    "rimraf": "^5.0.5",
+    "turbo": "^2.0.0",
+    "typescript": "^5.3.3"
+  },
+  "packageManager": "pnpm@8.14.0",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
