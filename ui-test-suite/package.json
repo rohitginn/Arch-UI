@@ -1,0 +1,35 @@
+{
+  "name": "ui-test-suite",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "vitest",
+    "test:ui": "playwright test",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "vue": "^3.3.8"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@testing-library/jest-dom": "^6.1.4",
+    "@testing-library/react": "^14.1.2",
+    "@testing-library/user-event": "^14.5.1",
+    "@testing-library/vue": "^8.0.0",
+    "@types/jest-axe": "^3.5.9",
+    "@types/node": "^20.9.0",
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "@vitejs/plugin-react": "^6.0.1",
+    "@vue/test-utils": "^2.4.1",
+    "axe-core": "^4.8.2",
+    "jest-axe": "^8.0.0",
+    "jsdom": "^29.0.1",
+    "playwright": "^1.40.0",
+    "typescript": "^5.2.2",
+    "vitest": "^4.1.0",
+    "vitest-axe": "^0.1.0"
+  }
+}

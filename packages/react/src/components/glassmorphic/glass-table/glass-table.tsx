@@ -118,19 +118,54 @@ const GlassTableCell = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTM
 );
 GlassTableCell.displayName = 'GlassTableCell';
 
-const GlassTableHeadCell = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-    ({ className, children, ...props }, ref) => {
+interface GlassTableHeadCellProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Whether this column is sortable */
+    sortable?: boolean;
+    /** Current sort direction: 'ascending' | 'descending' | 'none' */
+    sortDirection?: 'ascending' | 'descending' | 'none';
+    /** Callback when sort is triggered */
+    onSort?: () => void;
+}
+
+const GlassTableHeadCell = React.forwardRef<HTMLDivElement, GlassTableHeadCellProps>(
+    ({ className, children, sortable = false, sortDirection = 'none', onSort, ...props }, ref) => {
+        const handleClick = () => {
+            if (sortable && onSort) {
+                onSort();
+            }
+        };
+
+        const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+            if (sortable && onSort && (e.key === 'Enter' || e.key === ' ')) {
+                e.preventDefault();
+                onSort();
+            }
+        };
+
         return (
             <div
                 ref={ref}
                 role="columnheader"
+                aria-sort={sortable ? sortDirection : undefined}
+                tabIndex={sortable ? 0 : undefined}
+                onClick={sortable ? handleClick : undefined}
+                onKeyDown={sortable ? handleKeyDown : undefined}
                 className={cn(
                     'px-4 py-3 align-middle font-semibold text-text-primary/70 tracking-tightest',
+                    sortable && 'cursor-pointer hover:text-text-primary transition-colors select-none',
+                    sortable && 'focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:rounded',
                     className
                 )}
                 {...props}
             >
-                {children}
+                <div className="flex items-center gap-2">
+                    {children}
+                    {sortable && (
+                        <span className="text-text-primary/40" aria-hidden="true">
+                            {sortDirection === 'ascending' ? '↑' : sortDirection === 'descending' ? '↓' : '↕'}
+                        </span>
+                    )}
+                </div>
             </div>
         );
     }
